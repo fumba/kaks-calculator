@@ -6,9 +6,9 @@
 body {
 	height: 100%;
 	margin: 0;
-	background: url(assets/img/books.jpg);
-	background-size: 1440px 800px;
-	background-repeat: no-repeat;
+	background: url(assets/img/dna.jpg);
+	background-size: 1280px 720px;
+	background-repeat:repeat-x;
 	display: compact;
 }
 </style>
@@ -30,35 +30,30 @@ body {
 			</form>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="active"><a href="StudentEnrollmentWithStruts">Home</a></li>
-				<li><a href="signup-input">Signup</a></li>
-				<li><a href="login-input">Login</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Explore<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="#">Contact us</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Further Actions</a></li>
-					</ul></li>
+				<li><a href="access-tool">Access Tool</a></li>
+				<li><a href="http://www.fumba.me" target="_blank">fumba.me</a></li>
 			</ul>
 		</div>
 		<!-- /.nav-collapse -->
 	</div>
+	
 	<div class="container">
 		<div class="jumbotron">
 			<div>
-				<h1>Welcome to Online Student Enrollment!</h1>
-				<p>To get started, you need to enter your details to enroll with
-					us. Or login to access your details, if you are already enrolled.</p>
+				<h1>KaKs Online Calculation Tool</h1>
+				<p>
+				Calculates the ratio of nonsynonymous (Ka) to synonymous (Ks) nucleotide substitution rates inorder to indicate selective pressures on genes, and can also be used to identify pairwise combinations of genes or branches of gene phylogenetic trees, where encoded proteins may have changed function. 
+				Algorithms Implemented: NG (Jukes Cantor Models), LWL (JC-K2P-K2P) and MLWL (K2P-K2P-K2P).				
+				</p>
 			</div>
 
-			<a class="btn btn-primary" href="signup-input">Signup  </a> <a
-				class="btn btn-primary" href="login-input">Login  </a>
+			<a class="btn btn-primary" href="signup-input">Access Tool </a>
+			
 		</div>
 
 		<div></div>
 	</div>
-	<script src="jquery-1.8.3.js">
-</script>
+	<script src="jquery-2.1.4.min.js"></script>
 
 	<script src="bootstrap/js/bootstrap.js">
 </script>
