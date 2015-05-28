@@ -15,7 +15,9 @@
 		<div class="container">
 		
 			<div class="row">
-			<p>Enter two sequences to be compared below in the fields below.</p>
+			<p>	Enter two sequences to be compared below in the fields below.<br>
+				Examples: CCCACUAUCGUUAACGAUAGCUGGUCCUAC , CCAACAAUGGUUAACGACAGAUCGUCCUAU 
+			</p>
 			</div>
 		
 			<div class="row">
@@ -27,11 +29,11 @@
 					
 					<fieldset>
 					
-					<s:textfield label="Original Sequence" name="userName"
-					cssClass="col-lg-12" placeholder="ATCGCC" />
+					<s:textfield label="Original Sequence" name="originalSequence" labelposition="top"
+					cssClass="col-lg-12" placeholder="Input must be in FASTA format" />
 					
-					<s:textfield label="Substituted Sequence" name="userName"
-					cssClass="col-lg-12" placeholder="CCCATG" />
+					<s:textfield label="Substituted Sequence" name="mutatedSequence"
+					cssClass="col-lg-12" placeholder="Input must be in FASTA format" />
 					
 					<div class="col-lg-9 col-lg-offset-3">
 						<s:submit cssClass="btn btn-primary" value="Calculate" />
