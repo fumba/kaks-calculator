@@ -14,11 +14,24 @@
 	<div class="well">
 		<div class="container">
 		
-			<s:textfield name="some_name" value="%{userName}"/>
+		<div class="jumbotron">
+		
+	
+		<div> 
+		Jukes-Cantor (JC) Method:<br>
+		Ka:	<s:property value="ngKa" escapeHtml="false"/> <br>
+		Ks:	<s:property value="ngKs" escapeHtml="false"/> <br>
+		Ka/Ks:	<s:property value="ngKaKs" escapeHtml="false"/> <br>
+		</div>
+		
+		</div>
+		
+		<a class="btn btn-primary" href="kaksform.jsp">Go back to Calculator </a>
 		
 		</div>
 	</div>
 </div>
+
 
 
 </body>

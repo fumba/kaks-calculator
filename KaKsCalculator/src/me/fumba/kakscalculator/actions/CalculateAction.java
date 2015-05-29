@@ -7,8 +7,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 import me.fumba.kakscalculator.common.ApplicationConstants;
@@ -22,6 +22,11 @@ public class CalculateAction extends ActionSupport implements
 	private String originalSequence;
 	private String mutatedSequence;
 	private String errorMessage;
+
+	// NG - Method variables.
+	private double ngKa;
+	private double ngKs;
+	private double ngKaKs;
 
 	@Action(value = "calculate", results = {
 			@Result(name = "success", location = "/results.jsp"),
@@ -38,12 +43,20 @@ public class CalculateAction extends ActionSupport implements
 						mutatedSequence);
 				if (result.equals(COMPUTE_ERROR)) {
 					this.setErrorMessage(calculationService.getErrorMessage());
-					return "error";
+					return ERROR;
 				} else {
-					return "success";
+					
+					//Jukes-Cantor (JC) method
+					this.setNgKa(calculationService.getNgKa());
+					this.setNgKs(calculationService.getNgKs());
+					this.setNgKaKs(calculationService.getNgKaKs());
+					
+					//
+					return SUCCESS;
 				}
 			}
 		}
+		this.setErrorMessage("Access to calculation tool has been denied.");
 		return result;
 	}
 
@@ -60,6 +73,7 @@ public class CalculateAction extends ActionSupport implements
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "Original Sequence needs to be provided.")
+	@FieldExpressionValidator(expression = "originalSequence.length() % 3 == 0", message = "Sequence length is not divisible by 3.")
 	public void setOriginalSequence(String originalSequence) {
 		this.originalSequence = originalSequence;
 	}
@@ -69,6 +83,7 @@ public class CalculateAction extends ActionSupport implements
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "Mutated Sequence needs to be provided.")
+	@FieldExpressionValidator(expression = "mutatedSequence.length() % 3 == 0", message = "Sequence length is not divisible by 3.")
 	public void setMutatedSequence(String mutatedSequence) {
 		this.mutatedSequence = mutatedSequence;
 	}
@@ -79,6 +94,30 @@ public class CalculateAction extends ActionSupport implements
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public double getNgKa() {
+		return ngKa;
+	}
+
+	public void setNgKa(double ngKa) {
+		this.ngKa = ngKa;
+	}
+
+	public double getNgKs() {
+		return ngKs;
+	}
+
+	public void setNgKs(double ngKs) {
+		this.ngKs = ngKs;
+	}
+
+	public double getNgKaKs() {
+		return ngKaKs;
+	}
+
+	public void setNgKaKs(double ngKaKs) {
+		this.ngKaKs = ngKaKs;
 	}
 
 }

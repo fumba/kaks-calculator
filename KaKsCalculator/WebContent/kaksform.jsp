@@ -29,11 +29,11 @@
 					
 					<fieldset>
 					
-					<s:textfield label="Original Sequence" name="originalSequence" labelposition="top"
-					cssClass="col-lg-12" placeholder="Input must be in FASTA format" />
+					<s:textfield label="Original Sequence" name="originalSequence" 
+					cssClass="col-lg-12" placeholder="Sequence in FASTA format" />
 					
 					<s:textfield label="Substituted Sequence" name="mutatedSequence"
-					cssClass="col-lg-12" placeholder="Input must be in FASTA format" />
+					cssClass="col-lg-12" placeholder="Sequence in FASTA format" />
 					
 					<div class="col-lg-9 col-lg-offset-3">
 						<s:submit cssClass="btn btn-primary" value="Calculate" />
