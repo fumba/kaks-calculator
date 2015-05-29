@@ -23,9 +23,8 @@ public interface ApplicationConstants {
 
 	// Amino Acids
 	String PHENYLALANINE = "F";
-	String LEUCINE = "L";
-	String ISOLEUCINE = "I";
-	String METHIONINE = "M";
+	String ISOLEUCINE = "L";
+	String METHIONINE = "I";
 	String VALINE = "V";
 	String SERINE1 = "S1";
 	String SERINE2 = "S2";
@@ -44,5 +43,6 @@ public interface ApplicationConstants {
 	String TRYPTOPHAN = "W";
 	String ARGININE = "R";
 	String GLYCINE = "G";
+	String LEUCINE = "L";
 
 }
