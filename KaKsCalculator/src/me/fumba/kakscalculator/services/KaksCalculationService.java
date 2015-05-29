@@ -276,9 +276,9 @@ public class KaksCalculationService implements ApplicationConstants {
 		boolean invalidSequence = false;
 		StringBuffer buffer = new StringBuffer();
 		for (Character nucleotide : sequence.toCharArray()) {
-			if (ADENINE.equals(nucleotide.toString()) || GUANINE.equals(nucleotide.toString())
-					|| THYMINE.equals(nucleotide.toString())
-					|| CYTOSINE.equals(nucleotide.toString()) || URACIL.equals(nucleotide.toString())) {
+			if (ADENINE.equals(nucleotide) || GUANINE.equals(nucleotide)
+					|| THYMINE.equals(nucleotide)
+					|| CYTOSINE.equals(nucleotide) || URACIL.equals(nucleotide)) {
 				buffer.append(nucleotide);
 			} else {
 				invalidSequence = true;

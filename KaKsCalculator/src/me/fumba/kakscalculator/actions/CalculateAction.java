@@ -51,7 +51,6 @@ public class CalculateAction extends ActionSupport implements
 					this.setNgKs(calculationService.getNgKs());
 					this.setNgKaKs(calculationService.getNgKaKs());
 					
-					//
 					return SUCCESS;
 				}
 			}
