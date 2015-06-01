@@ -14,7 +14,6 @@
 	<div class="well">
 		<div class="container">
 		
-<<<<<<< HEAD
 		<div class="jumbotron">
 		
 	
@@ -32,14 +31,6 @@
 		</div>
 	</div>
 </div>
-
-=======
-			<s:textfield name="some_name" value="%{userName}"/>
-		
-		</div>
-	</div>
-</div>
->>>>>>> branch 'master' of https://github.com/fumbaa/kaks-calculator.git
 
 
 </body>
