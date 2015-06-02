@@ -28,6 +28,12 @@ public class CalculateAction extends ActionSupport implements
 	private double ngKs;
 	private double ngKaKs;
 
+	private double lwlKa;
+	private double lwlKs;
+	private double lwlKaKs;
+	private double lwlVKa;
+	private double lwlVKs;
+
 	@Action(value = "calculate", results = {
 			@Result(name = "success", location = "/results.jsp"),
 			@Result(name = "input", location = "/kaksform.jsp"),
@@ -45,11 +51,18 @@ public class CalculateAction extends ActionSupport implements
 					this.setErrorMessage(calculationService.getErrorMessage());
 					return ERROR;
 				} else {
-					
-					//Jukes-Cantor (JC) method
+
+					// Jukes-Cantor (JC) method
 					this.setNgKa(calculationService.getNgKa());
 					this.setNgKs(calculationService.getNgKs());
 					this.setNgKaKs(calculationService.getNgKaKs());
+
+					// Kimuras - 2 parameter (K2P) model - LWL
+					this.setLwlKs(calculationService.getLwlKs());
+					this.setLwlVKs(calculationService.getLwlKs());
+					this.setLwlKa(calculationService.getLwlKa());
+					this.setLwlVKa(calculationService.getLwlVKa());
+					this.setLwlKaKs(calculationService.getLwlKaKs());
 					
 					return SUCCESS;
 				}
@@ -117,6 +130,46 @@ public class CalculateAction extends ActionSupport implements
 
 	public void setNgKaKs(double ngKaKs) {
 		this.ngKaKs = ngKaKs;
+	}
+
+	public double getLwlKa() {
+		return lwlKa;
+	}
+
+	public void setLwlKa(double lwlKa) {
+		this.lwlKa = lwlKa;
+	}
+
+	public double getLwlKs() {
+		return lwlKs;
+	}
+
+	public void setLwlKs(double lwlKs) {
+		this.lwlKs = lwlKs;
+	}
+
+	public double getLwlKaKs() {
+		return lwlKaKs;
+	}
+
+	public void setLwlKaKs(double lwlKaKs) {
+		this.lwlKaKs = lwlKaKs;
+	}
+
+	public double getLwlVKa() {
+		return lwlVKa;
+	}
+
+	public void setLwlVKa(double lwlVKa) {
+		this.lwlVKa = lwlVKa;
+	}
+
+	public double getLwlVKs() {
+		return lwlVKs;
+	}
+
+	public void setLwlVKs(double lwlVKs) {
+		this.lwlVKs = lwlVKs;
 	}
 
 }

@@ -10,28 +10,33 @@
 
 <%@ include file="include/navigation_bar.jsp" %>
 
-<div class="col-lg-6 col-lg-offset-3">
-	<div class="well">
+
 		<div class="container">
 		
 		<div class="jumbotron">
 		
-	
-		<div> 
 		Jukes-Cantor (JC) Method:<br>
 		Ka:	<s:property value="ngKa" escapeHtml="false"/> <br>
 		Ks:	<s:property value="ngKs" escapeHtml="false"/> <br>
-		Ka/Ks:	<s:property value="ngKaKs" escapeHtml="false"/> <br>
-		</div>
+		Ka/Ks:	<s:property value="ngKaKs" escapeHtml="false"/>
 		
 		</div>
 		
+		<div class="jumbotron">
+		Kimuras- two parameter (K2P) model:<br>
+		Ka:	<s:property value="lwlKa" escapeHtml="false"/> <br>
+		Ka Variance: <s:property value="lwlVKa" escapeHtml="false"/> <br>
+		Ks:	<s:property value="lwlKs" escapeHtml="false"/> <br>
+		Ks Variance: <s:property value="lwlVKs" escapeHtml="false"/> <br>
+		Ka/Ks:	<s:property value="lwlKaKs" escapeHtml="false"/> <br>
+		</div>
+		
+		
+		<div class="jumbotron">
 		<a class="btn btn-primary" href="kaksform.jsp">Go back to Calculator </a>
+		</div>
 		
 		</div>
-	</div>
-</div>
-
 
 </body>
 </html>
