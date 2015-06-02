@@ -26,6 +26,11 @@ public class KaksCalculationService implements ApplicationConstants {
 	private double lwlVKa;
 	private double lwlVKs;
 
+	// Both NG and LWL
+	private double mlwlKa;
+	private double mlwlKs;
+	private double mlwlKaKs;
+
 	private Map<String, String> nsxMap;
 	private Map<String, String> aminoMap;
 	private Map<String, String> codonDegreeMap;
@@ -150,6 +155,13 @@ public class KaksCalculationService implements ApplicationConstants {
 		codonDegreeMap.put(GLYCINE, "004");
 	}
 
+	/**
+	 * Entry point for calculations.
+	 * 
+	 * @param originalSequence
+	 * @param mutatedSequence
+	 * @return
+	 */
 	public String computeRatios(String originalSequence, String mutatedSequence) {
 		String markedUnconventionalNucleotides = checkForUnconventionalNucleotides(originalSequence);
 		if (StringUtils.isNotBlank(markedUnconventionalNucleotides)) {
@@ -168,13 +180,96 @@ public class KaksCalculationService implements ApplicationConstants {
 		String cleanOriginalSequence = this.convertDnaToRna(originalSequence);
 		String cleanMutatedSequence = this.convertDnaToRna(mutatedSequence);
 
-		// Calculation using the Jukes-Cantor (JC) method
+		// Calculation using the Jukes-Cantor (JC) model
 		this.kaKsCalcNG(cleanOriginalSequence, cleanMutatedSequence);
 
 		// Calculation using the Kimuras- two parameter (K2P) model
 		this.kaKsCalcLWL(cleanOriginalSequence, cleanMutatedSequence);
 
+		// Calculation using both JK and K2P models
+		this.kaKsCalcMLWL(cleanOriginalSequence, cleanMutatedSequence);
+
 		return COMPUTE_SUCCESS;
+	}
+
+	/**
+	 * Calculation of Ka/Ks using both JK and K2P models.
+	 * 
+	 * Ks - JC
+	 * 
+	 * Ka = K2P
+	 * 
+	 * Correcting - K2P
+	 * 
+	 * @param cleanOriginalSequence
+	 * @param cleanMutatedSequence
+	 */
+	private void kaKsCalcMLWL(String cleanOriginalSequence,
+			String cleanMutatedSequence) {
+
+		final double piQvRation = this.calcPiQvRatio(cleanOriginalSequence,
+				cleanMutatedSequence);
+
+		Map<String, Object> pQValues = this.calculatePQValues(
+				cleanOriginalSequence, cleanMutatedSequence);
+		final double L0 = (double) pQValues.get(L2_AVERAGE_COUNT);
+		final double L2 = (double) pQValues.get(L2_AVERAGE_COUNT);
+		final double L4 = (double) pQValues.get(L4_AVERAGE_COUNT);
+
+		Map<String, Double> calculatedValues = this.calculateMeanVariance(
+				CHAR_0, cleanOriginalSequence, cleanMutatedSequence, pQValues);
+		final double K0 = calculatedValues.get(TOTAL_SUBSTITUTIONS);
+
+		calculatedValues = this.calculateMeanVariance(CHAR_2,
+				cleanOriginalSequence, cleanMutatedSequence, pQValues);
+		final double A2 = calculatedValues.get(TRANSITIONAL_SUBSTITUTIONS);
+		final double B2 = calculatedValues.get(TRANSVERSION_SUBSTITUTIONS);
+
+		calculatedValues = this.calculateMeanVariance(CHAR_4,
+				cleanOriginalSequence, cleanMutatedSequence, pQValues);
+		final double K4 = calculatedValues.get(TOTAL_SUBSTITUTIONS);
+
+		if (piQvRation >= 2) {
+			this.setMlwlKa((L2 * B2 + L0 * K0)
+					/ (((2 * L2) / ((piQvRation - 1) + 2)) + L0));
+			this.setMlwlKs((L2 * A2 + L4 * K4)
+					/ (((piQvRation - 1) * L2 / (piQvRation - 1) + 2) + L4));
+		} else {
+			this.setMlwlKa((L2 * B2 + L0 * K0) / (((2 * L2) / 3) + L0));
+			this.setMlwlKs((L2 * A2 + L4 * K4) / ((L2 / 3) + L4));
+		}
+		this.setMlwlKaKs(this.mlwlKa / this.mlwlKs);
+	}
+
+	/**
+	 * Calculates the transition / transversion mutation rate ratio.
+	 * 
+	 * @param cleanOriginalSequence
+	 * @param cleanMutatedSequence
+	 * @return
+	 */
+	private double calcPiQvRatio(String cleanOriginalSequence,
+			String cleanMutatedSequence) {
+		double countPi = 0; // transitions
+		double countQv = 0; // transversions
+
+		String changeType;
+		for (int index = 0; index < cleanOriginalSequence.length(); index++) {
+			if (index <= cleanMutatedSequence.length()) {
+				changeType = this.computeTransversionVsTransitionChange(
+						cleanOriginalSequence.charAt(index),
+						cleanMutatedSequence.charAt(index));
+				switch (changeType) {
+				case TRANSITION:
+					countPi++;
+					break;
+				case TRANSVERSION:
+					countQv++;
+					break;
+				}
+			}
+		}
+		return countPi / countQv;
 	}
 
 	/**
@@ -309,9 +404,6 @@ public class KaksCalculationService implements ApplicationConstants {
 		resultMap.put(TRANSVERSION_SUBSTITUTIONS_ERROR_VARIANCE, VBi);
 		resultMap.put(TOTAL_SUBSTITUTIONS, Ki);
 		resultMap.put(TOTAL_SUBSTITUTIONS_ERROR_VARIANCE, VKi);
-		resultMap.put(L2_AVERAGE_COUNT, L0);
-		resultMap.put(L2_AVERAGE_COUNT, L2);
-		resultMap.put(L4_AVERAGE_COUNT, L4);
 
 		return resultMap;
 	}
@@ -356,8 +448,8 @@ public class KaksCalculationService implements ApplicationConstants {
 							originalNucleotide, mutatedNucleotide);
 					degeneracyCode = degeneracySequence.charAt(index);
 
-					// Transition Changes
-					if (StringUtils.equals(changeType, TRANSITION)) {
+					switch (changeType) {
+					case TRANSITION:
 						if (degeneracyCode.equals(CHAR_0)) {
 							pValues[0] = 1 / L0;
 						} else if (degeneracyCode.equals(CHAR_2)) {
@@ -365,9 +457,8 @@ public class KaksCalculationService implements ApplicationConstants {
 						} else if (degeneracyCode.equals(CHAR_4)) {
 							pValues[2] = 1 / L4;
 						}
-					}
-					// Transversion Changes
-					else if (StringUtils.equals(changeType, TRANSVERSION)) {
+						break;
+					case TRANSVERSION:
 						if (degeneracyCode.equals(CHAR_0)) {
 							qValues[0] = 1 / L0;
 						} else if (degeneracyCode.equals(CHAR_2)) {
@@ -375,7 +466,7 @@ public class KaksCalculationService implements ApplicationConstants {
 						} else if (degeneracyCode.equals(CHAR_4)) {
 							qValues[2] = 1 / L4;
 						}
-					}
+					}// --switch
 				}
 			}
 		}
@@ -714,6 +805,30 @@ public class KaksCalculationService implements ApplicationConstants {
 
 	public void setLwlVKs(double lwlVKs) {
 		this.lwlVKs = lwlVKs;
+	}
+
+	public double getMlwlKa() {
+		return mlwlKa;
+	}
+
+	public void setMlwlKa(double mlwlKa) {
+		this.mlwlKa = mlwlKa;
+	}
+
+	public double getMlwlKs() {
+		return mlwlKs;
+	}
+
+	public void setMlwlKs(double mlwlKs) {
+		this.mlwlKs = mlwlKs;
+	}
+
+	public double getMlwlKaKs() {
+		return mlwlKaKs;
+	}
+
+	public void setMlwlKaKs(double mlwlKaKs) {
+		this.mlwlKaKs = mlwlKaKs;
 	}
 
 }

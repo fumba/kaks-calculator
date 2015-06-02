@@ -28,11 +28,17 @@ public class CalculateAction extends ActionSupport implements
 	private double ngKs;
 	private double ngKaKs;
 
+	// LWL variables
 	private double lwlKa;
 	private double lwlKs;
 	private double lwlKaKs;
 	private double lwlVKa;
 	private double lwlVKs;
+
+	// Both NG and LWL
+	private double mlwlKa;
+	private double mlwlKs;
+	private double mlwlKaKs;
 
 	@Action(value = "calculate", results = {
 			@Result(name = "success", location = "/results.jsp"),
@@ -63,7 +69,11 @@ public class CalculateAction extends ActionSupport implements
 					this.setLwlKa(calculationService.getLwlKa());
 					this.setLwlVKa(calculationService.getLwlVKa());
 					this.setLwlKaKs(calculationService.getLwlKaKs());
-					
+
+					// Both JK and K2P Models
+					this.setMlwlKa(calculationService.getLwlKa());
+					this.setMlwlKs(calculationService.getMlwlKs());
+					this.setMlwlKaKs(calculationService.getMlwlKaKs());
 					return SUCCESS;
 				}
 			}
@@ -172,4 +182,27 @@ public class CalculateAction extends ActionSupport implements
 		this.lwlVKs = lwlVKs;
 	}
 
+	public double getMlwlKa() {
+		return mlwlKa;
+	}
+
+	public void setMlwlKa(double mlwlKa) {
+		this.mlwlKa = mlwlKa;
+	}
+
+	public double getMlwlKs() {
+		return mlwlKs;
+	}
+
+	public void setMlwlKs(double mlwlKs) {
+		this.mlwlKs = mlwlKs;
+	}
+
+	public double getMlwlKaKs() {
+		return mlwlKaKs;
+	}
+
+	public void setMlwlKaKs(double mlwlKaKs) {
+		this.mlwlKaKs = mlwlKaKs;
+	}
 }

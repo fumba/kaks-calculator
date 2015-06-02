@@ -1,6 +1,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<sb:head includeScripts="false" includeScriptsValidation="false" includeStylesResponsive="true" />
+<sb:head includeScripts="false" includeScriptsValidation="false"
+	includeStylesResponsive="true" />
 
 
 <!-- Include CSS -->
@@ -14,13 +15,18 @@ body {
 	margin: 0;
 	background: url(assets/img/dna.jpg);
 	background-size: 1280px 720px;
-	background-repeat:repeat-x;
+	background-repeat: repeat-x;
 	display: compact;
 }
 
 .error {
 	color: #ff0000;
 	font-size: 0.9em;
+	font-weight: bold;
+}
+
+.focuslink {
+	color: blue;
 	font-weight: bold;
 }
 
@@ -32,8 +38,8 @@ body {
 	margin: 16px;
 }
 
-input[type="text"]{
-	height: 40px;
+.navbar-default, .jumbotron {
+	background-color: #FFFFF0;
 }
 </style>
 
