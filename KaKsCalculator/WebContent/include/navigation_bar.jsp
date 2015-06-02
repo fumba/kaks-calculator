@@ -11,7 +11,7 @@
 	<div class="navbar-collapse collapse navbar-responsive-collapse">
 
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="/KaKsCalculator/">Home</a></li>
+			<li><a href="index.jsp">Home</a></li>
 			<li><a href="kaksform.jsp">Access Calculator</a></li>
 			<li><a href="https://github.com/fumbaa/kaks-calculator"
 				target="_blank">Source Code</a></li>
