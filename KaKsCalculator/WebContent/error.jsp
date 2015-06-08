@@ -21,7 +21,11 @@
 			<br> <br> <a class="btn btn-primary" href="kaksform.jsp">Go
 				back to Calculator </a>
 		</div>
+		
+		<%@ include file="include/footer.jsp"%>
+		
 	</div>
-
+	
+	
 </body>
 </html>

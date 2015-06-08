@@ -1,5 +1,10 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<meta charset="utf-8">
+<meta name="description"
+	content="KaKs Calculator by Fumbani Chibaka/">
+	
 <sb:head includeScripts="false" includeScriptsValidation="false"
 	includeStylesResponsive="true" />
 

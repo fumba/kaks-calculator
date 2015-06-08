@@ -23,8 +23,7 @@
 			<br> Ka/Ks:
 			<s:property value="ngKaKs" escapeHtml="false" />
 
-			<br>
-			<br> Kimuras- two parameter (K2P) model:<br> Ka:
+			<br> <br> Kimuras- two parameter (K2P) model:<br> Ka:
 			<s:property value="lwlKa" escapeHtml="false" />
 			<br> Ka Variance:
 			<s:property value="lwlVKa" escapeHtml="false" />
@@ -34,8 +33,7 @@
 			<s:property value="lwlVKs" escapeHtml="false" />
 			<br> Ka/Ks:
 			<s:property value="lwlKaKs" escapeHtml="false" />
-			<br> <br>
-			<br> JC and K2P Models:<br> Ka:
+			<br> <br> <br> JC and K2P Models:<br> Ka:
 			<s:property value="mlwlKa" escapeHtml="false" />
 			<br> Ks:
 			<s:property value="mlwlKs" escapeHtml="false" />
@@ -49,6 +47,8 @@
 			<a class="btn btn-primary" href="kaksform.jsp">Go back to
 				Calculator </a>
 		</div>
+
+		<%@ include file="include/footer.jsp"%>
 
 	</div>
 
