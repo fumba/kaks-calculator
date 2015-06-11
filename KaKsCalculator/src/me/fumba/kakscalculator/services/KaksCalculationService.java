@@ -1,7 +1,18 @@
 package me.fumba.kakscalculator.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -183,7 +194,7 @@ public class KaksCalculationService implements ApplicationConstants {
 		String cleanMutatedSequence = this.convertDnaToRna(mutatedSequence);
 
 		try {
-			
+
 			// Calculation using the Jukes-Cantor (JC) model
 			this.kaKsCalcNG(cleanOriginalSequence, cleanMutatedSequence);
 
@@ -193,21 +204,56 @@ public class KaksCalculationService implements ApplicationConstants {
 			// Calculation using both JK and K2P models
 			this.kaKsCalcMLWL(cleanOriginalSequence, cleanMutatedSequence);
 		} catch (Exception e) {
-			
+
 			// Log all exceptions
 			Audit audit = new Audit();
 			audit.setErrorDetails(e.getMessage());
 			audit.setOriginalSequence(originalSequence);
 			audit.setMutatedSequence(mutatedSequence);
-			
+
 			AuditDAO auditDao = new AuditDAO();
 			auditDao.add(audit);
-			
+
+			this.sendErrorMessageToAdmin();
+
 			this.setErrorMessage("Error occurred while perfoming calculation. Please contact admin.");
 			return COMPUTE_ERROR;
 		}
 
 		return COMPUTE_SUCCESS;
+	}
+
+	/**
+	 * Sends an error message to the admin when an error is encountered.
+	 */
+	private void sendErrorMessageToAdmin() {
+
+		Properties properties = new Properties();
+		properties.put("mail.smtp.host", "smtp.gmail.com");
+		properties.put("mail.smtp.auth", true);
+
+		Session session = Session.getDefaultInstance(properties,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication("username",
+								"pass");
+					}
+				});
+		String msgBody = "An Error occurred while a client was using KaKs Calculator.";
+
+		try {
+			Message msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress("email",
+					"KaKs Error Admin"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
+					"email", "Admin"));
+			msg.setSubject("KaKs Error Occurred.");
+			msg.setText(msgBody);
+			Transport.send(msg);
+
+		} catch (Exception e) {
+			System.err.print("Error sending email");
+		}
 	}
 
 	/**
