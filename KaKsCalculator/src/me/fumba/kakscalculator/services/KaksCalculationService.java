@@ -9,6 +9,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 import me.fumba.kakscalculator.common.ApplicationConstants;
+import me.fumba.kakscalculator.persistence.Audit;
+import me.fumba.kakscalculator.persistence.AuditDAO;
 
 public class KaksCalculationService implements ApplicationConstants {
 
@@ -180,14 +182,30 @@ public class KaksCalculationService implements ApplicationConstants {
 		String cleanOriginalSequence = this.convertDnaToRna(originalSequence);
 		String cleanMutatedSequence = this.convertDnaToRna(mutatedSequence);
 
-		// Calculation using the Jukes-Cantor (JC) model
-		this.kaKsCalcNG(cleanOriginalSequence, cleanMutatedSequence);
+		try {
+			int test = 1/0;
+			// Calculation using the Jukes-Cantor (JC) model
+			this.kaKsCalcNG(cleanOriginalSequence, cleanMutatedSequence);
 
-		// Calculation using the Kimuras- two parameter (K2P) model
-		this.kaKsCalcLWL(cleanOriginalSequence, cleanMutatedSequence);
+			// Calculation using the Kimuras- two parameter (K2P) model
+			this.kaKsCalcLWL(cleanOriginalSequence, cleanMutatedSequence);
 
-		// Calculation using both JK and K2P models
-		this.kaKsCalcMLWL(cleanOriginalSequence, cleanMutatedSequence);
+			// Calculation using both JK and K2P models
+			this.kaKsCalcMLWL(cleanOriginalSequence, cleanMutatedSequence);
+		} catch (Exception e) {
+			
+			// Log all exceptions
+			Audit audit = new Audit();
+			audit.setErrorDetails(e.getMessage());
+			audit.setOriginalSequence(originalSequence);
+			audit.setMutatedSequence(mutatedSequence);
+			
+			AuditDAO auditDao = new AuditDAO();
+			auditDao.add(audit);
+			
+			this.setErrorMessage("Error occurred while perfoming calculation. Please contact admin.");
+			return COMPUTE_ERROR;
+		}
 
 		return COMPUTE_SUCCESS;
 	}
