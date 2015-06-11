@@ -183,7 +183,7 @@ public class KaksCalculationService implements ApplicationConstants {
 		String cleanMutatedSequence = this.convertDnaToRna(mutatedSequence);
 
 		try {
-			int test = 1/0;
+			
 			// Calculation using the Jukes-Cantor (JC) model
 			this.kaKsCalcNG(cleanOriginalSequence, cleanMutatedSequence);
 
