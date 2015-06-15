@@ -12,6 +12,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 import me.fumba.kakscalculator.common.ApplicationConstants;
+import me.fumba.kakscalculator.common.GetPropertyValues;
 
 @ResultPath(value = "/")
 public class CalculateAction extends ActionSupport implements
@@ -48,6 +49,7 @@ public class CalculateAction extends ActionSupport implements
 	public String execute() throws Exception {
 
 		String result = ERROR;
+		GetPropertyValues propertyValues = new GetPropertyValues();
 		KaksCalculationService calculationService = new KaksCalculationService();
 		if (pageName != null && calculationService != null) {
 			if (pageName.equals(KA_KS_FORM)) {
@@ -78,7 +80,7 @@ public class CalculateAction extends ActionSupport implements
 				}
 			}
 		}
-		this.setErrorMessage("Access to calculation tool has been denied.");
+		this.setErrorMessage(propertyValues.getPropValues("access_denied"));
 		return result;
 	}
 
