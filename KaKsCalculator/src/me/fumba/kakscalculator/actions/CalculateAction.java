@@ -2,6 +2,7 @@ package me.fumba.kakscalculator.actions;
 
 import me.fumba.kakscalculator.services.KaksCalculationService;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
@@ -13,10 +14,10 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 import me.fumba.kakscalculator.common.ApplicationConstants;
 import me.fumba.kakscalculator.common.GetPropertyValues;
+import me.fumba.kakscalculator.common.VerifyUtils;
 
 @ResultPath(value = "/")
-public class CalculateAction extends ActionSupport implements
-		ApplicationConstants {
+public class CalculateAction extends ActionSupport implements ApplicationConstants {
 
 	private static final long serialVersionUID = 6269198833217107593L;
 	private String pageName;
@@ -41,20 +42,24 @@ public class CalculateAction extends ActionSupport implements
 	private double mlwlKs;
 	private double mlwlKaKs;
 
-	@Action(value = "calculate", results = {
-			@Result(name = "success", location = "/results.jsp"),
-			@Result(name = "input", location = "/kaksform.jsp"),
-			@Result(name = "error", location = "/error.jsp") })
+	@Action(value = "calculate", results = { @Result(name = "success", location = "/results.jsp"),
+			@Result(name = "input", location = "/kaksform.jsp"), @Result(name = "error", location = "/error.jsp") })
 	@Override
 	public String execute() throws Exception {
+
+		String gRecaptchaResponse = ServletActionContext.getRequest().getParameter("g-recaptcha-response");
+		boolean valid = VerifyUtils.verify(gRecaptchaResponse);
+		if (!valid) {
+			addActionError("Captcha Mismatched! Try Again");
+			return INPUT;
+		}
 
 		String result = ERROR;
 		GetPropertyValues propertyValues = new GetPropertyValues();
 		KaksCalculationService calculationService = new KaksCalculationService();
 		if (pageName != null && calculationService != null) {
 			if (pageName.equals(KA_KS_FORM)) {
-				result = calculationService.computeRatios(originalSequence,
-						mutatedSequence);
+				result = calculationService.computeRatios(originalSequence, mutatedSequence);
 				if (result.equals(COMPUTE_ERROR)) {
 					this.setErrorMessage(calculationService.getErrorMessage());
 					return ERROR;

@@ -5,6 +5,7 @@
 <c:set var="pageTitle" value="Error - KaKs Calculation Online Tool"
 	scope="request" />
 <%@ include file="include/header.jsp"%>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
